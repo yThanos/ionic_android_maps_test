@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { GoogleMap } from '@capacitor/google-maps';
+import { GoogleMap, Polygon } from '@capacitor/google-maps';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -30,6 +30,13 @@ export class Tab1Page {
         zoom: 16
       }
     })
+    this.addPoligons()
+  }
+
+  polygons = []
+
+  addPoligons(){
+    this.mapa.addPolygons([])
   }
 }
 
