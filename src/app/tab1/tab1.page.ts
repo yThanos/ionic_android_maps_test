@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { GoogleMap } from '@capacitor/google-maps';
+import { GoogleMap, Marker } from '@capacitor/google-maps';
 import { environment } from 'src/environments/environment';
+import { Poligono } from '../model/poligono';
 
 @Component({
   selector: 'app-tab1',
@@ -15,6 +16,33 @@ export class Tab1Page {
     this.createMap();
   }
 
+  marker: Marker = {
+    coordinate: {
+      lat: -29.715674957530123,
+      lng: -53.715002212004485
+    },
+    title: "Biblioteca Central Da UFSM",
+    snippet: "A Biblioteca Central da UFSM é um órgão de apoio da Pró-Reitoria de Graduação. Coordena o Sistema de Bibliotecas da UFSM (SiB-UFSM).",
+    opacity: 0.8
+  }
+
+  poligonos: Poligono[] = [
+    new  Poligono(
+      [
+        new google.maps.LatLng(-29.71591558004931,-53.71481397158000),
+        new google.maps.LatLng(-29.71598066995641,-53.71520914011945),
+        new google.maps.LatLng(-29.71543628034292,-53.71532837200635),
+        new google.maps.LatLng(-29.71537414873194,-53.71492979684156),
+        new google.maps.LatLng(-29.71591558004931,-53.71481397158000)
+      ],
+      "#FF0000",
+      0.8,
+      2,
+      "#FF0000",
+      0.35
+    ),
+  ]
+
   async createMap(){
     this.mapa = await GoogleMap.create({
       id: "my_map",
@@ -27,7 +55,12 @@ export class Tab1Page {
         },
         zoom: 16
       }
+    }, (data)=>{
+      this.mapa.addMarker(this.marker)
     });
+
+    this.mapa.addPolygons(this.poligonos);
+
     let map = new google.maps.Map(document.getElementById("mapa") as HTMLElement, {
       center: { lat: -29.720026670824154, lng: -53.7175518200379 },
       zoom: 16,
@@ -51,6 +84,7 @@ export class Tab1Page {
       map: map,
       visible: false
     });
+
     let infoWindow = new google.maps.InfoWindow({
       content: "<div style='display:flex;flex-direction:row;justify-content:space-between;'><img src='https://imgur.com/MWeNnx6.png' width='100' height='100'><div style='width: 10px;'></div><div style='display:flex;flex-direction:column;justify-content:center;'><b>Biblioteca Central Da UFSM</b><p>A Biblioteca Central da UFSM é um órgão de apoio da Pró-Reitoria de Graduação. Coordena o Sistema de Bibliotecas da UFSM (SiB-UFSM).</p></div></div>",
       ariaLabel: "Area 1"
@@ -62,14 +96,8 @@ export class Tab1Page {
         map
       });
     })
-    marker.setMap(map);
-    polygon.setMap(map);
-  }
-
-  polygons = []
-
-  addPoligons(){
-    this.mapa.addPolygons([])
+    //marker.setMap(map);
+    //polygon.setMap(map);
   }
 }
 /*
