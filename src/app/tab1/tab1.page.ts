@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { GoogleMap, Marker } from '@capacitor/google-maps';
 import { environment } from 'src/environments/environment';
-import { Poligono } from '../model/poligono';
 
 @Component({
   selector: 'app-tab1',
@@ -26,22 +25,18 @@ export class Tab1Page {
     opacity: 0.8
   }
 
-  poligonos: Poligono[] = [
-    new  Poligono(
-      [
-        new google.maps.LatLng(-29.71591558004931,-53.71481397158000),
-        new google.maps.LatLng(-29.71598066995641,-53.71520914011945),
-        new google.maps.LatLng(-29.71543628034292,-53.71532837200635),
-        new google.maps.LatLng(-29.71537414873194,-53.71492979684156),
-        new google.maps.LatLng(-29.71591558004931,-53.71481397158000)
-      ],
-      "#FF0000",
-      0.8,
-      2,
-      "#FF0000",
-      0.35
-    ),
-  ]
+  polygonOptions = {
+    points: [
+      [10, 10],
+      [20, 20],
+      [30, 30],
+      [40, 40],
+      [50, 50],
+    ],
+    strokeColor: '#0000ff',
+    fillColor: '#00ffff',
+    strokeWidth: 5,
+  }
 
   async createMap(){
     this.mapa = await GoogleMap.create({
@@ -55,13 +50,17 @@ export class Tab1Page {
         },
         zoom: 16
       }
-    }, (data)=>{
-      this.mapa.addMarker(this.marker)
-    });
+    })
 
-    this.mapa.addPolygons(this.poligonos);
+    this.mapa.addPolygons([this.polygonOptions]);
+    //marker.setMap(map);
+    //polygon.setMap(map);
+  }
+}
+/*
 
-    let map = new google.maps.Map(document.getElementById("mapa") as HTMLElement, {
+
+let map = new google.maps.Map(document.getElementById("mapa") as HTMLElement, {
       center: { lat: -29.720026670824154, lng: -53.7175518200379 },
       zoom: 16,
     });
@@ -90,17 +89,18 @@ export class Tab1Page {
       ariaLabel: "Area 1"
     });
 
+
+
     polygon.addListener("click", () => {
       infoWindow.open({
         anchor: marker,
         map
       });
     })
-    //marker.setMap(map);
-    //polygon.setMap(map);
-  }
-}
-/*
+
+
+
+
 
 const northeast = [-29.710317267445962, -53.708645705427465]
 const southwest = [-29.727996585731866, -53.72328774178500]
